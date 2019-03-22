@@ -3,13 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MasterPlayer
+public class Player : MonoBehaviour
 {
     //config params
     
     
-    //[SerializeField] float projectileSpeed = 10f;
-    //[SerializeField] float projectileFiringPeriod = 1f;
+    [SerializeField] float projectileSpeed = 10f;
+    [SerializeField] float projectileFiringPeriod = 1f;
+    [SerializeField] float moveSpeed = 10f;
+    [SerializeField] float padding = 0.3f;
 
     //Coroutine firingCoroutine;
 
@@ -20,12 +22,9 @@ public class Player : MasterPlayer
     float yMax;
 
     // Start is called before the first frame update
-    override public void Start()
+    public void Start()
     {
-        //TODO move this to a game manager object for better code manageability
-        //TODO create boundaries for the player
         SetUpMoveBoundaries();
-
     }
 
     //gives the boundaries for the space ship
@@ -71,7 +70,7 @@ public class Player : MasterPlayer
         }
     }
 
-    public override void MoveXY()
+    public void MoveXY()
     {
         //new position that we want to move to
         var deltaX = Input.GetAxis("Horizontal") * Time.deltaTime * moveSpeed;
@@ -79,7 +78,6 @@ public class Player : MasterPlayer
 
         var newxPos = Mathf.Clamp(transform.position.x + deltaX, xMin, xMax);
         var newyPos = Mathf.Clamp(transform.position.y + deltaY, yMin, yMax);
-        //TODO new position finding
-        //transform.position = new Vector2(newxPos, newyPos);
+        transform.position = new Vector2(newxPos, newyPos);
     }
 }

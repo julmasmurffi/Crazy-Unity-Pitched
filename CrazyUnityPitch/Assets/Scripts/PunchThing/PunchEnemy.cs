@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PunchEnemy : MasterPlayer
+public class PunchEnemy : MonoBehaviour
 {
     // Start is called before the first frame update
-    public override void Start() => base.Start();
+    void Start()
+    {
+
+    }
 
     // Update is called once per frame
     void Update()
