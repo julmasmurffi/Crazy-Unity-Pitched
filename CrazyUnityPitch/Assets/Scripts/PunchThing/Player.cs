@@ -6,18 +6,26 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     //config params
-    
-    
-    [SerializeField] float projectileSpeed = 10f;
-    [SerializeField] float projectileFiringPeriod = 1f;
-    [SerializeField] float moveSpeed = 10f;
-    [SerializeField] float padding = 0.3f;
 
-    //Coroutine firingCoroutine;
+    //not of use for now unless we want to shoot
+    //[SerializeField] float projectileSpeed = 10f;
+    //[SerializeField] float projectileFiringPeriod = 1f;
+
+    //TODO animator fot the player character
+    [SerializeField] Collider2D punchHitBox;
+    [SerializeField] float moveSpeed = 7f;
+    [SerializeField] float padding = 0.3f;
+    [SerializeField] float health;
+
+    [SerializeField] float attackCd = 0.3f;
+    private float attackTimer;
+    private bool isAttacking = false;
+   
+
+    //Coroutine punchCoroutine;
 
     float xMin;
     float xMax;
-
     float yMin;
     float yMax;
 
@@ -25,6 +33,7 @@ public class Player : MonoBehaviour
     public void Start()
     {
         SetUpMoveBoundaries();
+        punchHitBox.enabled = false;
     }
 
     //gives the boundaries for the space ship
@@ -42,7 +51,39 @@ public class Player : MonoBehaviour
     void Update()
     {
         MoveXY();
+        Punch();
+
+
+        //TODO firing coroutine
         Fire();
+    }
+
+
+    //TODO implement and test the method
+    private void Punch()
+    {
+        if (Input.GetKeyDown("space") && !isAttacking)
+        {
+            isAttacking = true;
+            attackTimer = attackCd;
+
+            punchHitBox.enabled = true;
+        }
+        //TODO start a chain of punches
+
+        if(isAttacking)
+        {
+            if(attackTimer > 0)
+            {
+                attackTimer -= Time.deltaTime;
+            }
+            else
+            {
+                isAttacking = false;
+                punchHitBox.enabled = false;
+            }
+        }
+
     }
 
     private void Fire()
