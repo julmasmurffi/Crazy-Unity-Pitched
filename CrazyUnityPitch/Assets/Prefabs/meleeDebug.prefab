@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5860277332552837319}
   - component: {fileID: 6692320628827894088}
   - component: {fileID: 6405873108344602009}
+  - component: {fileID: 8199571388785151101}
   m_Layer: 0
   m_Name: meleeDebug
   m_TagString: Untagged
@@ -106,3 +107,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.13, y: 0.57}
   m_EdgeRadius: 0
+--- !u!114 &8199571388785151101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1401576214500394489}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c15e9eadebec5b94fa189fc53c069657, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

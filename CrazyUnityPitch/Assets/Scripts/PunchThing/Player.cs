@@ -15,13 +15,12 @@ public class Player : MonoBehaviour
     [SerializeField] Collider2D punchHitBox;
     [SerializeField] float moveSpeed = 7f;
     [SerializeField] float padding = 0.3f;
-    [SerializeField] float health;
+    [SerializeField] float health = 5f;
 
     [SerializeField] float attackCd = 0.3f;
-    private float attackTimer;
-    private bool isAttacking = false;
+    [SerializeField] private float attackTimer;
+    [SerializeField] private bool isAttacking = false;
    
-
     //Coroutine punchCoroutine;
 
     float xMin;
@@ -54,7 +53,7 @@ public class Player : MonoBehaviour
         Punch();
 
 
-        //TODO firing coroutine
+        //TODO firing coroutine for player ranged attacks
         Fire();
     }
 
@@ -83,9 +82,10 @@ public class Player : MonoBehaviour
                 punchHitBox.enabled = false;
             }
         }
-
+        //TODO anim set attacking to trigger animations?
     }
 
+    //TODO implement and test the method
     private void Fire()
     {
         if (Input.GetButtonDown("Fire1"))
@@ -110,6 +110,40 @@ public class Player : MonoBehaviour
             //yield return new WaitForSeconds(projectileFiringPeriod);
         }
     }
+
+    //TODO check and validate method
+    //checking for collisions on our player character
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //TODO validate
+        //TODO tag damaging items in editor
+        if (collision.gameObject.CompareTag("damaging"))
+        {
+            DamageDealer damageDealer = collision.gameObject.GetComponent<DamageDealer>();
+            HpCheck(damageDealer);
+            //endtag damaging collision
+        }
+
+        //pickup object
+        //compare tag is the best way to check for a certain type
+        else if (collision.gameObject.CompareTag("pickup"))
+        {
+            collision.gameObject.SetActive(false);
+
+        }
+    }
+
+    //check if we have 0 hp and also deduct our hp when a trigger hits us
+    private void HpCheck(DamageDealer damageDealer)
+    {
+        health -= damageDealer.GetDamage();
+        if(health <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    
 
     public void MoveXY()
     {
