@@ -126,8 +126,9 @@ public class Player : MonoBehaviour
 
         //pickup object
         //compare tag is the best way to check for a certain type
-        else if (collision.gameObject.CompareTag("pickup"))
+        if (collision.gameObject.CompareTag("pickup"))
         {
+            Debug.Log("pickup hidden");
             collision.gameObject.SetActive(false);
 
         }
@@ -139,7 +140,8 @@ public class Player : MonoBehaviour
         health -= damageDealer.GetDamage();
         if(health <= 0)
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
+            Debug.Log("ow, taking damage");
         }
     }
 
