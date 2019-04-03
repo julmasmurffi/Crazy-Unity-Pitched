@@ -20,7 +20,8 @@ public class Player : MonoBehaviour
     [SerializeField] float attackCd = 0.3f;
     [SerializeField] private float attackTimer;
     [SerializeField] private bool isAttacking = false;
-   
+
+    Rigidbody2D myRigidBody2D;
     //Coroutine punchCoroutine;
 
     float xMin;
@@ -31,6 +32,8 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
+        myRigidBody2D = GetComponent<Rigidbody2D>();
+
         SetUpMoveBoundaries();
         punchHitBox.enabled = false;
     }
@@ -57,7 +60,51 @@ public class Player : MonoBehaviour
         Fire();
     }
 
+    //TODO check and validate method
+    //checking for collisions on our player character
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("pickup now");
+        //TODO validate
+        //TODO tag damaging items in editor
+        //if (collision.gameObject.CompareTag("damaging"))
+        //{
+        //    DamageDealer damageDealer = collision.gameObject.GetComponent<DamageDealer>();
+        //    HpCheck(damageDealer);
+        //endtag damaging collision
+        //}
 
+        //pickup object here
+        //compare tag is the best way to check for a certain type
+        if (collision.gameObject.CompareTag("Pickup"))
+        {
+            collision.gameObject.SetActive(false);
+            Debug.Log("pickup done");
+
+        }
+    }
+
+    //check if we have 0 hp and also deduct our hp when a trigger hits us
+    private void HpCheck(DamageDealer damageDealer)
+    {
+        health -= damageDealer.GetDamage();
+        if(health <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    public void MoveXY()
+    {
+        //new position that we want to move to
+        var deltaX = Input.GetAxis("Horizontal") * Time.deltaTime * moveSpeed;
+        var deltaY = Input.GetAxis("Vertical") * Time.deltaTime * moveSpeed;
+
+        var newxPos = Mathf.Clamp(transform.position.x + deltaX, xMin, xMax);
+        var newyPos = Mathf.Clamp(transform.position.y + deltaY, yMin, yMax);
+        transform.position = new Vector2(newxPos, newyPos);
+    }
+    
     //TODO implement and test the method
     private void Punch()
     {
@@ -68,7 +115,7 @@ public class Player : MonoBehaviour
 
             punchHitBox.enabled = true;
         }
-        //TODO start a chain of punches
+        //TODO start a chain of punches with delayed timers as a condition
 
         if(isAttacking)
         {
@@ -109,50 +156,5 @@ public class Player : MonoBehaviour
 
             //yield return new WaitForSeconds(projectileFiringPeriod);
         }
-    }
-
-    //TODO check and validate method
-    //checking for collisions on our player character
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        //TODO validate
-        //TODO tag damaging items in editor
-        if (collision.gameObject.CompareTag("damaging"))
-        {
-            DamageDealer damageDealer = collision.gameObject.GetComponent<DamageDealer>();
-            HpCheck(damageDealer);
-            //endtag damaging collision
-        }
-
-        //pickup object
-        //compare tag is the best way to check for a certain type
-        else if (collision.gameObject.CompareTag("pickup"))
-        {
-            collision.gameObject.SetActive(false);
-
-        }
-    }
-
-    //check if we have 0 hp and also deduct our hp when a trigger hits us
-    private void HpCheck(DamageDealer damageDealer)
-    {
-        health -= damageDealer.GetDamage();
-        if(health <= 0)
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    
-
-    public void MoveXY()
-    {
-        //new position that we want to move to
-        var deltaX = Input.GetAxis("Horizontal") * Time.deltaTime * moveSpeed;
-        var deltaY = Input.GetAxis("Vertical") * Time.deltaTime * moveSpeed;
-
-        var newxPos = Mathf.Clamp(transform.position.x + deltaX, xMin, xMax);
-        var newyPos = Mathf.Clamp(transform.position.y + deltaY, yMin, yMax);
-        transform.position = new Vector2(newxPos, newyPos);
     }
 }
